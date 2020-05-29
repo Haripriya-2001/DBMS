@@ -1,0 +1,219 @@
+#include<iostream>
+#include<string.h>
+#include<fstream>
+int new_details(int);
+using namespace std;
+class student
+{
+ 	int admission_no;
+ 	int rollno;
+ 	char name[100];
+ 	public:
+ 	student() { }
+ 	void getdata();
+ 	void displaydata();
+ 	void newdetails();
+ 	void displaynewdetails();
+};
+void student::getdata() 
+{
+cout<<"\nName: ";
+cin.getline(name,100);
+cout<<"\nRoll number: ";
+cin>>rollno;
+cin.ignore();
+cout<<"\nAdmission number: ";
+cin>>admission_no;
+}
+void student::displaydata()
+{
+cout<<"\nName: "<<name<<endl;
+cout<<"\nRoll number: "<<rollno<<endl;
+cout<<"\nAdmission number: "<<admission_no<<endl;
+}
+
+int new_details(int x)
+{
+int x1;
+char name1[100];
+int roll_no;
+int admission__no;
+cout<<"Insert the new admission details."<<endl;
+cout<<"Enter details to be inserted: ";
+cin>>x;
+cout<<"\nEnter a value: ";
+cin>>x1;
+if(x==x1)
+{
+cout<<"Name: ";
+cin.getline(name1,100);
+cout<<"\nNew Roll Number: ";
+cin>>roll_no;
+cout<<"\nNew Admission Number: ";
+cin>>admission__no;
+cout<<endl;
+}
+cout<<"new student detail is: "<<endl;
+cout<<"Name: "<<name1<<endl;
+cout<<"Roll number: "<<roll_no<<endl;
+cout<<"Admissiion number: "<<admission__no<<endl;
+return name1,roll_no,admission__no;
+}
+ 
+int main()
+{
+cout<<"WELCOME TO STUDENT DATA BASE MANAGEMENT SYSTEM."<<endl;
+fstream file;
+int choice;
+cout<<"\t\t\t1.Student List\t\t\t\n"
+<<"\t\t\t2.New Admission\t\t\t\n"
+   <<"\t\t\t3.Leaving the school\t\t\t\n"
+   <<"\t\t\t4.Already studying in the school\t\t\t\n"
+   <<"\t\t\t5.Exit\t\t\t\n";
+cout<<"Enter your choice:-";
+cin>>choice;
+switch(choice)
+{
+case 1:
+int n;
+cout<<"Enter number of students list needed: "<<endl;
+cin>>n;
+student s[n]; //array of n student details.
+int i;
+file.open("STUDENT DATA BASE MANAGEMENT SYSTEM.text", ios::out);  //open file for writing
+int std;
+cout<<"Enter the students list of the class: ";
+cin>>std;
+cout<<"\nWriting student Information to the file:- "<<endl;
+for(i=0;i<n;i++)
+{
+s[i].getdata();
+//write object to a file
+file.write((char *)&s[i], sizeof(s[i]));
+}
+file.close(); //close the file
+file.open("STUDENT DATA BASE MANAGEMENT SYSTEM.text", ios::in); //open file for reading
+cout<<"Reading the Students information from the file:- "<<endl;
+for(i=0;i<n;i++)
+{
+//read an object from the file
+file.read((char *)&s[i], sizeof(s[i]));
+s[i].displaydata();
+}
+file.close();  //close the file
+break;
+case 2:
+int n;
+cout<<"Enter number of students list needed: "<<endl;
+cin>>n;
+student s[n]; //array of n student details.
+int i;
+file.open("STUDENT DATA BASE MANAGEMENT SYSTEM.text", ios::in); //open file for reading
+cout<<"Reading the Students information from the file:- "<<endl;
+for(i=0;i<n;i++)
+{
+s[i].getdata();
+//write object to a file
+file.write((char *)&s[i], sizeof(s[i]));
+}
+int pos;
+cout<<"Enter the position to insert the element: ";
+cin>>pos;
+if(pos>n)
+{
+cout<<"Invalid input";
+}
+else
+{
+for(i=n-1;i>=pos;i--)
+{
+s[i+1]=s[i];
+s[pos-1]=new_details(int);
+}
+
+cout<<"Array after intersection is: \n";
+for(i=0;i<=n;i++)
+{
+//read an object from the file
+file.read((char *)&s[i], sizeof(s[i]));
+s[i].displaydata();
+}
+}	
+file.close();
+break;
+case 3:
+int n;
+cout<<"Enter number of students list needed: "<<endl;
+cin>>n;
+student s[n]; //array of n student details.
+int i;
+file.open("objects.text", ios::out);  //open file for writing
+cout<<"Writing student Information to the file:- "<<endl;
+for(i=0;i<n;i++)
+{
+s[i].getdata();
+//write object to a file
+file.write((char *)&s[i], sizeof(s[i]));
+}
+cout<<"Enter the position: ";
+cin>>pos1;
+
+if(pos1>=n+1)
+{
+cout<<"\nDeleting the element from the list is not possible.";
+}
+else
+{
+for(i=pos1-1;i<n-1;i++)
+{
+s[i]=s[i+1];
+}
+cout<<"\nArray after declaration: ";
+for(i=0;i<n-1;i++)
+{
+cout<<"\n";
+//read an object from the file
+file.read((char *)&s[i], sizeof(s[i]));
+s[i].displaydata();
+}
+}
+file.close();
+break;
+case 4:
+int n;
+cout<<"Enter number of students list needed: "<<endl;
+cin>>n;
+student s[n]; //array of n student details.
+int i;
+file.open("objects.text", ios::out);  //open file for writing
+cout<<"Writing student Information to the file:- "<<endl;
+for(i=0;i<n;i++)
+{
+s[i].getdata();
+//write object to a file
+file.write((char *)&s[i], sizeof(s[i]));
+}
+//searching the number in the given list
+cout<<"Enter the element to be searched: "<<endl;
+cin>>rollno;
+for(i=0;i<n;i++)
+{
+if(s[i]==rollno)
+{
+cout<<"element found\n";;
+//read an object from the file
+file.read((char *)&s[i], sizeof(s[i]));
+s[i].displaydata();
+}
+}
+file.close();
+break;
+case 5:
+exit(0);
+break;
+default:
+cout<<"Invalid choice."<<endl;
+}
+
+return 0;
+}
